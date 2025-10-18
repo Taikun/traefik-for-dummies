@@ -1,0 +1,18 @@
+http:
+  routers:
+    portainer-router:
+      rule: Host(`portainer.compuhub.com`)
+      entryPoints: [websecure]
+      service: portainer-svc
+      tls: {}
+
+  services:
+    portainer-svc:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.20:9443"
+        serversTransport: portainer-transport
+
+  serversTransports:
+    portainer-transport:
+      insecureSkipVerify: true

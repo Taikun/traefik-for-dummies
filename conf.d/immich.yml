@@ -1,0 +1,15 @@
+http:
+  routers:
+    immich-router:
+      rule: Host(`photos.compuhub.com`)
+      entryPoints: [websecure]
+      service: immich-svc
+      tls:
+        options: default
+
+  services:
+    immich-svc:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.6:30041"
+        passHostHeader: true

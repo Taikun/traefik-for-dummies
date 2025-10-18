@@ -1,0 +1,42 @@
+providers:
+  file:
+    directory: /etc/traefik/conf.d/
+    watch: true
+
+entryPoints:
+  web:
+    address: ':80'
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ':443'
+  traefik:
+    address: ':8080'
+
+api:
+  dashboard: true
+  insecure: true  # Solo si estás en red local
+
+log:
+  filePath: /var/log/traefik/traefik.log
+  format: json
+  level: WARN
+
+accessLog:
+  filePath: /var/log/traefik/traefik-access.log
+  format: json
+  filters:
+    statusCodes:
+      - "200"
+      - "400-599"
+    retryAttempts: true
+    minDuration: "10ms"
+  bufferingSize: 0
+  fields:
+    headers:
+      defaultMode: drop
+      names:
+        User-Agent: keep
